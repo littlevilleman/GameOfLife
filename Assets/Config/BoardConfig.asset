@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 876e5eaf1f7139046ab58b38d020049d, type: 3}
   m_Name: BoardConfig
   m_EditorClassIdentifier: 
-  size: 250
+  size: 500
   refreshRate: 100

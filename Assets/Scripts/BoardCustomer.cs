@@ -22,10 +22,10 @@ namespace Core
         public void Generate(ICustomizableBoard board, int seed)
         {
             random = new System.Random(seed);
-            int aliveCount = random.Next(0, 250*250);
+            int aliveCount = random.Next(0, 20000);
 
             for (int i = 0; i < aliveCount; i++)
-                board.SetCell(random.Next(0, board.Size.x), random.Next(0, board.Size.y), true);
+                board.SetCell(random.Next(-board.Size.x, board.Size.x) / 2, random.Next(-board.Size.y, board.Size.y) / 2, true);
 
             OnRefresh?.Invoke();
         }

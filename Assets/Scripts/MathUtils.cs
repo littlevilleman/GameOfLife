@@ -1,5 +1,5 @@
 using System;
-using System.Drawing;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Core
@@ -14,6 +14,18 @@ namespace Core
                     count += (x != fromX || y != fromY) && board.GetCell(x, y) ? 1 : 0;
 
             return board.GetCell(fromX, fromY) ? (count == 2 || count == 3) : count == 3;
+        }
+
+        public static HashSet<Vector2Int> GetNeighbours(Vector2Int cell)
+        {
+            HashSet<Vector2Int> deadCells = new HashSet<Vector2Int>(8);
+
+            for (int x = cell.x - 1; x <= cell.x + 1; x++)
+                for (int y = cell.y - 1; y <= cell.y + 1; y++)
+                    if (x != cell.x || y != cell.y)
+                        deadCells.Add(new Vector2Int(x, y));
+
+            return deadCells;
         }
     }
 

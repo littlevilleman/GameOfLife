@@ -1,14 +1,12 @@
 using Config;
 using Core;
-using System;
 using UnityEngine;
-using UnityEngine.Experimental.Rendering.Universal;
 
 namespace Client
 {
     public class BoardBehavior : MonoBehaviour
     {
-        [SerializeField] private PixelPerfectCamera cam;
+        [SerializeField] private CameraBehavior cam;
         [SerializeField] private BoardScreen screen;
         [SerializeField] private BoardConfig config;
         [SerializeField] private Renderer rend;
@@ -18,41 +16,27 @@ namespace Client
         private IBoardPlayer player;
         private Texture2D texture;
 
-        private int zoomFactor = 1;
-
         private void OnEnable()
         {
-            board = new Board();
+            board = new InfiniteBoard();
             customer = new BoardCustomer();
             player = new BoardPlayer();
-            
+
             board.OnSetup += OnSetup;
-            board.OnStepOn += OnStepOn;
             customer.OnRefresh += Refresh;
             customer.OnRefreshCell += RefreshCell;
-            player.OnZoom += OnZoom;
-        }
-
-        private void OnZoom(bool zoomIn)
-        {
-            zoomFactor = Mathf.Clamp(Mathf.FloorToInt(zoomFactor * (zoomIn ? 2f : 1f / 2)), 1, 100);
-
-            OnSetup();
         }
 
         private void Start()
         {
             screen.Display(customer, board, player);
+            cam.Setup(player);
             board.Setup(config);
         }
 
         private void OnSetup()
         {
             texture = new Texture2D(board.Size.x, board.Size.y);
-            rend.transform.localScale = new Vector3(board.Size.x, board.Size.y, 1f) / zoomFactor;
-            cam.refResolutionX = 2 * board.Size.x / zoomFactor;
-            cam.refResolutionY = 2 * board.Size.y / zoomFactor;
-            cam.assetsPPU = zoomFactor;
             rend.material.mainTexture = texture;
             Refresh();
         }
@@ -65,36 +49,38 @@ namespace Client
             board.StepOn();
         }
 
-        private void OnStepOn(int step)
+        private void LateUpdate()
         {
             Refresh();
         }
 
         private void Refresh()
         {
-            for (int y = 0; y < board.Size.y; y++)
-                for (int x = 0; x < board.Size.x; x++)
-                    UpdateCell(x, y);
+            Vector2Int viewport = new Vector2Int(Mathf.FloorToInt(board.Size.y / cam.ZoomFactor / 2f), Mathf.FloorToInt(board.Size.x / cam.ZoomFactor / 2f));
+            Vector2Int location = new Vector2Int(Mathf.FloorToInt(transform.position.x), Mathf.FloorToInt(transform.position.y));
+
+            for (int y = -viewport.y; y < viewport.y; y++)
+                for (int x = -viewport.x; x < viewport.x; x++)
+                    UpdateCell(x, y, board.GetCell(location.x + x, location.y + y));
 
             texture.Apply();
         }
 
         private void RefreshCell(int x, int y)
         {
-            UpdateCell(x, y);
+            UpdateCell(x, y, true);
             texture.Apply();
         }
 
-        private void UpdateCell(int x, int y)
+        private void UpdateCell(int x, int y, bool alive)
         {
-            Color color = board.GetCell(x, y) ? Color.white : Color.black;
+            Color color = alive ? Color.white : Color.black;
             texture.SetPixel(x, y, color);
         }
 
         private void OnDisable()
         {
             board.OnSetup -= OnSetup;
-            board.OnStepOn -= OnStepOn;
             customer.OnRefresh -= Refresh;
             customer.OnRefreshCell -= RefreshCell;
         }

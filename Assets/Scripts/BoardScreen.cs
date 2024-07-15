@@ -21,7 +21,7 @@ namespace Client
         private IBoardCustomer customer;
         private ICustomizableBoard board;
         private IBoardPlayer player;
-        private int Seed => int.Parse(seedInput.text);
+        private int Seed =>  int.Parse(seedInput.text);
 
         private void OnEnable()
         {
@@ -89,7 +89,6 @@ namespace Client
 
         private void OnClickPlayButton()
         {
-            //seedInput.text = MathUtils.GenerateSeed(board).ToString();
             player.Pause();
         }
 
