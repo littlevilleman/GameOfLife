@@ -7,7 +7,7 @@ namespace Core
         public event RefreshBoard OnRefresh;
         public event RefreshCell OnRefreshCell;
 
-        public void Generate(ICustomizableBoard board, int seed);
+        public void Generate(IBoardPlayer player, ICustomizableBoard board, int seed);
         public void PaintCell(ICustomizableBoard board, int x, int y, bool alive);
         public void Clear(ICustomizableBoard board);
     }
@@ -19,13 +19,13 @@ namespace Core
 
         private System.Random random = new System.Random();
 
-        public void Generate(ICustomizableBoard board, int seed)
+        public void Generate(IBoardPlayer player, ICustomizableBoard board, int seed)
         {
             random = new System.Random(seed);
             int aliveCount = random.Next(0, 20000);
 
             for (int i = 0; i < aliveCount; i++)
-                board.SetCell(random.Next(-board.Size.x, board.Size.x) / 2, random.Next(-board.Size.y, board.Size.y) / 2, true);
+                board.SetCell(random.Next(-player.Resolution.x, player.Resolution.x) / 2, random.Next(-player.Resolution.y, player.Resolution.y) / 2, true);
 
             OnRefresh?.Invoke();
         }

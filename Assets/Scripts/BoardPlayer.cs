@@ -1,3 +1,4 @@
+using UnityEngine;
 using static Core.Events;
 
 namespace Core
@@ -7,6 +8,7 @@ namespace Core
         public event Pause OnPause;
         public event Zoom OnZoom;
         public bool IsPaused { get; }
+        public Vector2Int Resolution { get; }
         public void Pause();
         public void Pause(bool pause);
         public void Zoom(bool zoomIn);
@@ -17,6 +19,12 @@ namespace Core
         public event Pause OnPause;
         public event Zoom OnZoom;
         public bool IsPaused { get; protected set; } = true;
+        public Vector2Int Resolution { get; private set; } = new Vector2Int(500, 500);
+
+        public BoardPlayer(Vector2Int resolution) 
+        {
+            Resolution = resolution;
+        }
 
         public void Pause()
         {

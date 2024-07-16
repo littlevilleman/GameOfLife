@@ -10,7 +10,6 @@ namespace Core
     {
         public event Setup OnSetup;
         public event StepOn OnStepOn;
-        public Vector2Int Size { get; protected set; } = new Vector2Int(250, 250);
 
         private HashSet<Vector2Int> cells = new HashSet<Vector2Int>();
         private int step = 0;
@@ -41,7 +40,6 @@ namespace Core
 
         public void Setup(IBoardConfig config)
         {
-            Size = config.Size;
             Clear();
             OnSetup?.Invoke();
         }

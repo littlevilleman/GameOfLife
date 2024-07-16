@@ -1,5 +1,6 @@
 using Config;
 using Core;
+using System;
 using UnityEngine;
 
 namespace Client
@@ -20,11 +21,19 @@ namespace Client
         {
             board = new InfiniteBoard();
             customer = new BoardCustomer();
-            player = new BoardPlayer();
+            player = new BoardPlayer(new Vector2Int(500, 500));
 
             board.OnSetup += OnSetup;
             customer.OnRefresh += Refresh;
             customer.OnRefreshCell += RefreshCell;
+            player.OnZoom += OnZoom;
+        }
+
+        private void OnZoom(bool zoomIn)
+        {
+            texture = new Texture2D(player.Resolution.x, player.Resolution.y);
+            rend.material.mainTexture = texture;
+            rend.transform.localScale = new Vector3(player.Resolution.x, player.Resolution.y);
         }
 
         private void Start()
@@ -36,7 +45,7 @@ namespace Client
 
         private void OnSetup()
         {
-            texture = new Texture2D(board.Size.x, board.Size.y);
+            texture = new Texture2D(player.Resolution.x, player.Resolution.y);
             rend.material.mainTexture = texture;
             Refresh();
         }
@@ -56,7 +65,7 @@ namespace Client
 
         private void Refresh()
         {
-            Vector2Int viewport = new Vector2Int(Mathf.FloorToInt(board.Size.y / cam.ZoomFactor / 2f), Mathf.FloorToInt(board.Size.x / cam.ZoomFactor / 2f));
+            Vector2Int viewport = new Vector2Int(Mathf.FloorToInt(player.Resolution.x / cam.ZoomFactor / 2f), Mathf.FloorToInt(player.Resolution.y / cam.ZoomFactor / 2f));
             Vector2Int location = new Vector2Int(Mathf.FloorToInt(transform.position.x), Mathf.FloorToInt(transform.position.y));
 
             for (int y = -viewport.y; y < viewport.y; y++)

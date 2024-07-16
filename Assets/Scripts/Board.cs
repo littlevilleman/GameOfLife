@@ -26,7 +26,7 @@ namespace Core
         public event Setup OnSetup;
         public event StepOn OnStepOn;
 
-        public Vector2Int Size { get; }
+        //public Vector2Int Size { get; }
         public void Setup(IBoardConfig config);
         public void StepOn();
         public bool GetCell(int x, int y);

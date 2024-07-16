@@ -36,27 +36,27 @@ namespace Core
             return (Math.Abs(a * b) + a) % b;
         }
 
-        public static Vector2Int GetPointerLocation(Camera camera, ICustomizableBoard board)
+        public static Vector2Int GetPointerLocation(Camera camera, IBoardPlayer player)
         {
-            Vector3 offset = new Vector3(board.Size.x / 2f, board.Size.y / 2f, 0f);
+            Vector3 offset = new Vector3(player.Resolution.x / 2f, player.Resolution.y / 2f, 0f);
             Vector3 pointerPosition = camera.ScreenToWorldPoint(Input.mousePosition) + offset;
             return new Vector2Int(Mathf.RoundToInt(pointerPosition.x), Mathf.RoundToInt(pointerPosition.y));
         }
 
-        public static bool IsInsideBoard(Vector2Int location, ICustomizableBoard board)
+        public static bool IsInsideBoard(Vector2Int location, IBoardPlayer player)
         {
-            if (location.x >= 0 && location.y >= 0 && location.x < board.Size.x && location.y < board.Size.y)
+            if (location.x >= 0 && location.y >= 0 && location.x < player.Resolution.x && location.y < player.Resolution.y)
                 return true;
 
             return false;
         }
 
-        public static int GenerateSeed(ICustomizableBoard board)
+        public static int GenerateSeed(IBoardPlayer player, ICustomizableBoard board)
         {
-            int seed = -board.Size.x * board.Size.y;
+            int seed = -player.Resolution.x * player.Resolution.y;
 
-            for (int x = 0; x < board.Size.x; x++)
-                for (int y = 0; y < board.Size.y; y++)
+            for (int x = 0; x < player.Resolution.x; x++)
+                for (int y = 0; y < player.Resolution.y; y++)
                     seed += board.GetCell(x, y) ? x * y : 0; 
             
             return seed;

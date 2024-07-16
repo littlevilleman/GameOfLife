@@ -59,8 +59,8 @@ namespace Client
 
         private void PaintCell(bool paint)
         {
-            Vector2Int location = MathUtils.GetPointerLocation(Camera.main, board);
-            if (MathUtils.IsInsideBoard(location, board))
+            Vector2Int location = MathUtils.GetPointerLocation(Camera.main, player);
+            if (MathUtils.IsInsideBoard(location, player))//******
                 customer.PaintCell(board, location.x, location.y, paint);
         }
 
@@ -78,7 +78,7 @@ namespace Client
         private void OnClickGenerateBoardButton()
         {
             customer.Clear(board);
-            customer.Generate(board, Seed);
+            customer.Generate(player, board, Seed);
             player.Pause(true);
         }
 
