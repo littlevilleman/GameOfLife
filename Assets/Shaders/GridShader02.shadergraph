@@ -34,9 +34,6 @@
             "m_Id": "a9140cf7ccc147c5ba939271618e4cd2"
         },
         {
-            "m_Id": "e21e66ef3bba4792a680ca83dd4b5b21"
-        },
-        {
             "m_Id": "365758139ec14f30aa57eedce9f10fa2"
         },
         {
@@ -337,9 +334,6 @@
                 "m_Id": "a9140cf7ccc147c5ba939271618e4cd2"
             },
             {
-                "m_Id": "e21e66ef3bba4792a680ca83dd4b5b21"
-            },
-            {
                 "m_Id": "365758139ec14f30aa57eedce9f10fa2"
             }
         ]
@@ -521,36 +515,6 @@
         "e32": 0.0,
         "e33": 1.0
     }
-}
-
-{
-    "m_SGVersion": 0,
-    "m_Type": "UnityEditor.ShaderGraph.NormalMaterialSlot",
-    "m_ObjectId": "0f61ce495c6e442298e8b57f05a8c5ca",
-    "m_Id": 0,
-    "m_DisplayName": "Normal (Tangent Space)",
-    "m_SlotType": 0,
-    "m_Hidden": false,
-    "m_ShaderOutputName": "NormalTS",
-    "m_StageCapability": 2,
-    "m_Value": {
-        "x": 0.0,
-        "y": 0.0,
-        "z": 0.0
-    },
-    "m_DefaultValue": {
-        "x": 0.0,
-        "y": 0.0,
-        "z": 0.0
-    },
-    "m_Labels": [],
-    "m_Space": 3
-}
-
-{
-    "m_SGVersion": 0,
-    "m_Type": "UnityEditor.Rendering.Universal.ShaderGraph.UniversalSpriteCustomLitSubTarget",
-    "m_ObjectId": "1495a5836f1545a5af7d1a664f7df930"
 }
 
 {
@@ -746,7 +710,7 @@
     "m_ObjectId": "26d0a852921e45febc726a8e187d5617",
     "m_Datas": [],
     "m_ActiveSubTarget": {
-        "m_Id": "1495a5836f1545a5af7d1a664f7df930"
+        "m_Id": "faf0297c5c344804828dd4b52ecccf7c"
     },
     "m_AllowMaterialOverride": false,
     "m_SurfaceType": 0,
@@ -1268,10 +1232,10 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -936.9999389648438,
-            "y": -49.9999885559082,
-            "width": 207.99993896484376,
-            "height": 302.0
+            "x": -1100.800048828125,
+            "y": -305.60003662109377,
+            "width": 208.00006103515626,
+            "height": 301.6000061035156
         }
     },
     "m_Slots": [
@@ -1394,7 +1358,7 @@
     "m_Hidden": false,
     "m_ShaderOutputName": "Radius",
     "m_StageCapability": 3,
-    "m_Value": 0.00009999999747378752,
+    "m_Value": 0.0,
     "m_DefaultValue": 0.10000000149011612,
     "m_Labels": []
 }
@@ -1420,8 +1384,8 @@
     "hlslDeclarationOverride": 0,
     "m_Hidden": false,
     "m_Value": {
-        "x": 75.0,
-        "y": 75.0,
+        "x": 10.0,
+        "y": 10.0,
         "z": 0.0,
         "w": 0.0
     }
@@ -1773,7 +1737,7 @@
     "m_Hidden": false,
     "m_ShaderOutputName": "X",
     "m_StageCapability": 3,
-    "m_Value": 0.9999989867210388,
+    "m_Value": 0.8999999761581421,
     "m_DefaultValue": 0.0,
     "m_Labels": []
 }
@@ -1790,10 +1754,10 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -1928.9998779296875,
-            "y": 138.0,
+            "x": -1975.2000732421875,
+            "y": -140.8000030517578,
             "width": 208.0,
-            "height": 301.99993896484377
+            "height": 301.60003662109377
         }
     },
     "m_Slots": [
@@ -2133,40 +2097,6 @@
 
 {
     "m_SGVersion": 0,
-    "m_Type": "UnityEditor.ShaderGraph.BlockNode",
-    "m_ObjectId": "e21e66ef3bba4792a680ca83dd4b5b21",
-    "m_Group": {
-        "m_Id": ""
-    },
-    "m_Name": "SurfaceDescription.NormalTS",
-    "m_DrawState": {
-        "m_Expanded": true,
-        "m_Position": {
-            "serializedVersion": "2",
-            "x": 0.0,
-            "y": 0.0,
-            "width": 0.0,
-            "height": 0.0
-        }
-    },
-    "m_Slots": [
-        {
-            "m_Id": "0f61ce495c6e442298e8b57f05a8c5ca"
-        }
-    ],
-    "synonyms": [],
-    "m_Precision": 0,
-    "m_PreviewExpanded": true,
-    "m_DismissedVersion": 0,
-    "m_PreviewMode": 0,
-    "m_CustomColors": {
-        "m_SerializableColors": []
-    },
-    "m_SerializedDescriptor": "SurfaceDescription.NormalTS"
-}
-
-{
-    "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.DynamicValueMaterialSlot",
     "m_ObjectId": "e2b680a30fa94dc397ad345a9290f6b7",
     "m_Id": 1,
@@ -2400,5 +2330,11 @@
     "m_CustomColors": {
         "m_SerializableColors": []
     }
+}
+
+{
+    "m_SGVersion": 0,
+    "m_Type": "UnityEditor.Rendering.Universal.ShaderGraph.UniversalSpriteUnlitSubTarget",
+    "m_ObjectId": "faf0297c5c344804828dd4b52ecccf7c"
 }
 

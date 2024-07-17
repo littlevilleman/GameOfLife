@@ -11,18 +11,24 @@ namespace Client
         [SerializeField] private BoardConfig config;
         [SerializeField] private Renderer rend;
 
+        [SerializeField] private Color aliveColor = Color.white;
+        [SerializeField] private Color deadColor = Color.black;
+
         private IBoard board;
         private IBoardEditor editor;
         private IBoardPlayer player;
         private Texture2D texture;
 
+        private float refreshTime = 0f;
+
         private void OnEnable()
         {
             board = new Board();
             editor = new BoardEditor();
-            player = new BoardPlayer(new Vector2Int(500, 500));
+            player = new BoardPlayer(new Vector2Int(480, 270));
 
             //editor.OnEdit += Refresh;
+            //board.OnStepOn += (step) => Refresh();
             editor.OnEditCell += EditCell;
             player.OnZoom += OnZoom;
         }
@@ -31,7 +37,6 @@ namespace Client
         {
             screen.Display(editor, board, player);
             cam.Setup(player);
-            //board.Setup(config);
 
             ResetTexture();
         }
@@ -41,7 +46,13 @@ namespace Client
             if (player.IsPaused)
                 return;
 
+            refreshTime -= Time.deltaTime;
+
+            if (refreshTime > player.Speed)
+                return;
+
             board.StepOn();
+            refreshTime = 1f;
         }
 
         private void LateUpdate()
@@ -69,8 +80,7 @@ namespace Client
 
         private void RefreshCell(int x, int y, bool alive)
         {
-            Color color = alive ? Color.white : Color.black;
-            texture.SetPixel(x, y, color);
+            texture.SetPixel(x, y, alive ? aliveColor : deadColor);
         }
 
         private void OnZoom(int zoomFactor)
@@ -80,7 +90,7 @@ namespace Client
 
         private void ResetTexture()
         {
-            texture = new Texture2D(player.Resolution.x, player.Resolution.y, TextureFormat.RGBA32, false);
+            texture = new Texture2D(player.Resolution.x, player.Resolution.y, TextureFormat.RGBA32, true);
             rend.transform.localScale = new Vector3(player.Resolution.x, player.Resolution.y);
             rend.material.mainTexture = texture;
         }

@@ -13,6 +13,8 @@ namespace Client
         {
             Player = player;
             Player.OnZoom += Zoom;
+
+            Zoom(player.ZoomFactor);
         }
 
         void LateUpdate()
@@ -32,8 +34,7 @@ namespace Client
 
         private void Move(Vector3 direction)
         {
-            transform.position += Time.deltaTime * direction * Player.Resolution.x;
-            var location = Cell.GetLocation(transform.position);
+            Vector2Int location = Cell.GetLocation(transform.position + Time.deltaTime * direction * Player.Resolution.x / 8);
             transform.position = new Vector3(location.x, location.y);
         }
 

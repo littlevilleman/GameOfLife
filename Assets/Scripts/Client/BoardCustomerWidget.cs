@@ -9,7 +9,7 @@ namespace Client
     {
         [SerializeField] private Button clearButton;
         [SerializeField] private Button generateBoardButton;
-        [SerializeField] private Button randomizeSeedButton;
+        [SerializeField] private Button restartButton;
         [SerializeField] private TMP_Text seedInput;
 
         private IBoardEditor editor;
@@ -20,9 +20,9 @@ namespace Client
 
         private void OnEnable()
         {
-            generateBoardButton.onClick.AddListener(GenerateBoard);
-            clearButton.onClick.AddListener(ClearBoard);
-            randomizeSeedButton.onClick.AddListener(GenerateRandomSeed);
+            generateBoardButton.onClick.AddListener(OnClickGenerateButton);
+            clearButton.onClick.AddListener(OnClickClearButton);
+            restartButton.onClick.AddListener(OnClickRestartButton);
         }
 
         public void Display(object[] parameters)
@@ -30,8 +30,6 @@ namespace Client
             editor = parameters[0] as IBoardEditor;
             board = parameters[1] as ICustomizableBoard;
             player = parameters[2] as IBoardPlayer;
-
-            GenerateRandomSeed();
         }
 
         public void Update()
@@ -46,12 +44,22 @@ namespace Client
                 PaintCell(false);
         }
 
-        private void GenerateRandomSeed()
+        private void OnClickGenerateButton()
         {
             seedInput.text = Random.Range(-999999999, 999999999).ToString();
+
+            editor.Clear(board);
+            editor.Generate(board, Seed);
+            player.Pause(true);
         }
 
-        public void GenerateBoard()
+        private void OnClickClearButton()
+        {
+            editor.Clear(board);
+            player.Pause(true);
+        }
+
+        private void OnClickRestartButton()
         {
             editor.Clear(board);
             editor.Generate(board, Seed);
@@ -64,17 +72,10 @@ namespace Client
             editor.EditCell(board, location.x, location.y, paint);
         }
 
-        public void ClearBoard()
-        {
-            editor.Clear(board);
-            player.Pause(true);
-        }
-
         private void OnDisable()
         {
-            generateBoardButton.onClick.RemoveListener(GenerateBoard);
-            clearButton.onClick.RemoveListener(ClearBoard);
-            randomizeSeedButton.onClick.RemoveListener(GenerateRandomSeed);
+            generateBoardButton.onClick.RemoveListener(OnClickGenerateButton);
+            clearButton.onClick.RemoveListener(OnClickClearButton);
         }
     }
 

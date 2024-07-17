@@ -1,5 +1,5 @@
 using Core;
-using TMPro;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,7 +10,11 @@ namespace Client
         [SerializeField] private Button playButton;
         [SerializeField] private Button zoomInButton;
         [SerializeField] private Button zoomOutButton;
-        [SerializeField] private TMP_Text playButtonText;
+        [SerializeField] private Slider speedSlider;
+
+        [SerializeField] private Image playButtonImage;
+        [SerializeField] private Sprite playIcon;
+        [SerializeField] private Sprite pauseIcon;
 
         private IBoardPlayer player;
 
@@ -19,12 +23,15 @@ namespace Client
             playButton.onClick.AddListener(OnClickPlayButton);
             zoomInButton.onClick.AddListener(() => OnClickZoomButton(true));
             zoomOutButton.onClick.AddListener(() => OnClickZoomButton(false));
+            speedSlider.onValueChanged.AddListener(OnSpeedValueChanged);
         }
 
         public void Display(object[] parameters)
         {
             player = parameters[2] as IBoardPlayer;
             player.OnPause += OnPause;
+
+            speedSlider.value = player.Speed;
         }
 
         private void OnClickZoomButton(bool zoomIn)
@@ -39,7 +46,12 @@ namespace Client
 
         private void OnPause(bool isPaused)
         {
-            playButtonText.text = isPaused ? "Play" : "Pause";
+            playButtonImage.sprite = isPaused ? playIcon : pauseIcon;
+        }
+
+        private void OnSpeedValueChanged(float speed)
+        {
+            player.SetSpeed(speed);
         }
 
         private void OnDisable()
@@ -49,6 +61,7 @@ namespace Client
             playButton.onClick.RemoveListener(OnClickPlayButton);
             zoomInButton.onClick.RemoveListener(() => OnClickZoomButton(true));
             zoomOutButton.onClick.RemoveListener(() => OnClickZoomButton(false));
+            speedSlider.onValueChanged.RemoveListener(OnSpeedValueChanged);
         }
     }
 }
