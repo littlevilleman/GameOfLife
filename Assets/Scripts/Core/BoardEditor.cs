@@ -26,7 +26,7 @@ namespace Core
             int aliveCount = random.Next(0, 10000);
 
             for (int i = 0; i < aliveCount; i++)
-                board.SetCell(new Vector2Int(random.Next(-125, 125), random.Next(-125, 125)) / 2, true);
+                board.SetCell(new Vector2Int(random.Next(-125, 125), random.Next(-125, 250)) / 2, true);
 
             OnEdit?.Invoke();
         }

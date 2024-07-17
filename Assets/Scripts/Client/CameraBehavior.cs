@@ -34,14 +34,14 @@ namespace Client
 
         private void Move(Vector3 direction)
         {
-            Vector2Int location = Cell.GetLocation(transform.position + Time.deltaTime * direction * Player.Resolution.x / 8);
-            transform.position = new Vector3(location.x, location.y);
+            //Vector2Int location = Cell.GetLocation(transform.position + Time.deltaTime * direction * Player.Resolution.y);
+            //transform.position = new Vector3(location.x, location.y);
         }
 
         public void Zoom(int zoomFactor)
         {
-            ppCam.refResolutionX = Player.Resolution.x / zoomFactor;
-            ppCam.refResolutionY = Player.Resolution.y / zoomFactor;
+            //ppCam.refResolutionX = Player.Resolution.x / zoomFactor;
+            //ppCam.refResolutionY = Player.Resolution.y / zoomFactor;
         }
     }
 

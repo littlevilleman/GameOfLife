@@ -20,7 +20,7 @@ namespace Core
 
     public interface ICustomizableBoard : IBoard
     {
-        public int Cells { get; }
+        public int CellsCount { get; }
         public void SetCell(Vector2Int location, bool alive);
         public void Clear();
     }
@@ -28,7 +28,7 @@ namespace Core
     public class Board : ICustomizableBoard
     {
         public event StepOn OnStepOn;
-        public int Cells => cells.Count;
+        public int CellsCount => cells.Count;
 
         private HashSet<Vector2Int> cells = new HashSet<Vector2Int>();
         private int step = 0;
@@ -47,7 +47,7 @@ namespace Core
 
             step++;
             cells = cellsUpdt;
-            OnStepOn?.Invoke(step);
+            OnStepOn?.Invoke(cells, step);
         }
 
         public bool GetCell(Vector2Int location)

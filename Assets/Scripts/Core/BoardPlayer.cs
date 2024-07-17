@@ -23,11 +23,11 @@ namespace Core
         public event Pause OnPause;
         public event Zoom OnZoom;
 
-        public Vector2Int Resolution { get; private set; } = new Vector2Int(500, 500);
-        public int ZoomFactor { get; protected set; } = 4;
+        public Vector2Int Resolution { get; private set; }
+        public int ZoomFactor { get; protected set; } = 1;
         public bool IsPaused { get; protected set; } = true;
         public float Speed { get; protected set; } = .5f;
-        public Vector2Int Viewport => new Vector2Int(Mathf.FloorToInt(Resolution.x / 2f / ZoomFactor), Mathf.FloorToInt(Resolution.y / 2f / ZoomFactor));
+        public Vector2Int Viewport => new Vector2Int(Mathf.RoundToInt(Resolution.x / 2f / ZoomFactor), Mathf.RoundToInt(Resolution.y / 2f / ZoomFactor));
 
 
         public BoardPlayer(Vector2Int resolution) 
@@ -56,6 +56,23 @@ namespace Core
         public void SetSpeed(float speed)
         {
             Speed = speed;
+        }
+    }
+
+    public struct ViewportBounds
+    {
+        public Vector2Int location;
+        public Vector2Int size;
+
+        public ViewportBounds(Vector2Int location, Vector2Int size)
+        {
+            this.location = location;
+            this.size = size;
+        }
+
+        public bool Contains(Vector2Int cell)
+        {
+            return cell.x - location.x >= -size.x && cell.x - location.x < size.x && cell.y - location.y >= -size.y && cell.y - location.y < size.y;
         }
     }
 }

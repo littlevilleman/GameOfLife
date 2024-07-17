@@ -76,6 +76,7 @@ namespace Client
         {
             generateBoardButton.onClick.RemoveListener(OnClickGenerateButton);
             clearButton.onClick.RemoveListener(OnClickClearButton);
+            restartButton.onClick.RemoveListener(OnClickRestartButton);
         }
     }
 

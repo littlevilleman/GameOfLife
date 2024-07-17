@@ -1,4 +1,5 @@
 using Core;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -23,10 +24,10 @@ namespace Client
             player.Display(parameters);
         }
 
-        private void OnStepOn(int step)
+        private void OnStepOn(HashSet<Vector2Int> cells, int step)
         {
             stepsText.text = $"Step: {step}";
-            cellsText.text = $"Cells: {board.Cells}";
+            cellsText.text = $"Cells: {cells.Count}";
         }
 
         private void OnDisable()

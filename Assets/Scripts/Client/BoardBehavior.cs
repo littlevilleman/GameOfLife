@@ -1,5 +1,6 @@
 using Config;
 using Core;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Client
@@ -11,8 +12,8 @@ namespace Client
         [SerializeField] private BoardConfig config;
         [SerializeField] private Renderer rend;
 
-        [SerializeField] private Color aliveColor = Color.white;
-        [SerializeField] private Color deadColor = Color.black;
+        [SerializeField] private Color aliveColor = Color.green;
+        [SerializeField] private Color deadColor = Color.red;
 
         private IBoard board;
         private IBoardEditor editor;
@@ -25,10 +26,10 @@ namespace Client
         {
             board = new Board();
             editor = new BoardEditor();
-            player = new BoardPlayer(new Vector2Int(480, 270));
+            player = new BoardPlayer(new Vector2Int(Screen.currentResolution.width, Screen.currentResolution.height));
 
             //editor.OnEdit += Refresh;
-            //board.OnStepOn += (step) => Refresh();
+            board.OnStepOn += (cells, step) => Refresh(cells);
             editor.OnEditCell += EditCell;
             player.OnZoom += OnZoom;
         }
@@ -55,32 +56,31 @@ namespace Client
             refreshTime = 1f;
         }
 
-        private void LateUpdate()
-        {
-            Refresh();
-        }
+        //private void LateUpdate()
+        //{
+        //    Refresh();
+        //}
 
-        private void Refresh()
-        {
-            Vector2Int viewport = player.Viewport;
-            Vector2Int location = Cell.GetLocation(transform.position);
 
-            for (int y = -viewport.y; y < viewport.y; y++)
-                for (int x = -viewport.x; x < viewport.x; x++)
-                    RefreshCell(x, y, board.GetCell(location + new Vector2Int(x, y)));
+        private void Refresh(HashSet<Vector2Int> cells)
+        {
+            ResetTexture();
+
+            HashSet<Vector2Int> cellsUpdt = new HashSet<Vector2Int>(cells);
+            ViewportBounds bounds = new ViewportBounds(Cell.GetLocation(transform.position), player.Viewport);
+
+            cellsUpdt.RemoveWhere(cell => !bounds.Contains(cell));
+
+            foreach (Vector2Int cell in cellsUpdt)
+                texture.SetPixel(cell.x - bounds.location.x, cell.y - bounds.location.y, aliveColor);
 
             texture.Apply();
         }
 
         private void EditCell(int x, int y, bool alive)
         {
-            RefreshCell(x, y, alive);
-            texture.Apply();
-        }
-
-        private void RefreshCell(int x, int y, bool alive)
-        {
             texture.SetPixel(x, y, alive ? aliveColor : deadColor);
+            texture.Apply();
         }
 
         private void OnZoom(int zoomFactor)
@@ -90,8 +90,8 @@ namespace Client
 
         private void ResetTexture()
         {
-            texture = new Texture2D(player.Resolution.x, player.Resolution.y, TextureFormat.RGBA32, true);
-            rend.transform.localScale = new Vector3(player.Resolution.x, player.Resolution.y);
+            texture = new Texture2D(player.Resolution.x / player.ZoomFactor, player.Resolution.y / player.ZoomFactor, TextureFormat.RGFloat, false);
+            //rend.transform.localScale = new Vector3(player.Resolution.x, player.Resolution.y) / player.ZoomFactor;
             rend.material.mainTexture = texture;
         }
 
