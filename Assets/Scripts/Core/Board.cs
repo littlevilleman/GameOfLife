@@ -14,7 +14,6 @@ namespace Core
 
     public interface ICellMap
     {
-        public ICollection<Vector2Int> Cells { get; }
         public bool GetCell(Vector2Int location);
     }
 

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using static Core.Events;
 
@@ -5,6 +6,7 @@ namespace Core
 {
     public interface IEditableCellMap : ICellMap
     {
+        public ICollection<Vector2Int> Cells { get; }
         public void SetCell(Vector2Int location, bool alive);
         public void Clear();
     }

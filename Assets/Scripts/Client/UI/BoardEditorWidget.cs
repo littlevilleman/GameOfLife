@@ -10,7 +10,6 @@ namespace Client
         [SerializeField] private CameraBehavior cam;
         [SerializeField] private Button clearButton;
         [SerializeField] private Button generateBoardButton;
-        [SerializeField] private Button restartButton;
         [SerializeField] private TMP_Text seedInput;
 
         private IBoardEditor editor;
@@ -23,7 +22,6 @@ namespace Client
         {
             generateBoardButton.onClick.AddListener(OnClickGenerateButton);
             clearButton.onClick.AddListener(OnClickClearButton);
-            restartButton.onClick.AddListener(OnClickRestartButton);
         }
 
         public void Display(object[] parameters)
@@ -36,18 +34,23 @@ namespace Client
         public void Update()
         {
             if (Input.GetMouseButton(0))
-                PaintCell(true);
+                EditCell(true);
 
             if (Input.GetMouseButton(1))
-                PaintCell(false);
+                EditCell(false);
+        }
+
+        public void Regenerate()
+        {
+            editor.Clear(board);
+            editor.Generate(board, Seed);
         }
 
         private void OnClickGenerateButton()
         {
             seedInput.text = Random.Range(-999999999, 999999999).ToString();
 
-            editor.Clear(board);
-            editor.Generate(board, Seed);
+            Regenerate();
             player.Pause(true);
             player.Reset();
         }
@@ -58,20 +61,12 @@ namespace Client
             player.Pause(true);
         }
 
-        private void OnClickRestartButton()
+        private void EditCell(bool paint)
         {
-            editor.Clear(board);
-            editor.Generate(board, Seed);
-            player.Pause(true);
-            player.Reset();
-        }
-
-        private void PaintCell(bool paint)
-        {
-            if (player.IsPaused)
+            if (!player.IsPaused)
                 return;
 
-            Vector2Int location = cam.GetPointerLocation(Input.mousePosition);
+            Vector2Int location = Cell.GetLocation(cam.GetPointerPosition(Input.mousePosition));
             editor.EditCell(board, location.x, location.y, paint);
         }
 
@@ -79,7 +74,6 @@ namespace Client
         {
             generateBoardButton.onClick.RemoveListener(OnClickGenerateButton);
             clearButton.onClick.RemoveListener(OnClickClearButton);
-            restartButton.onClick.RemoveListener(OnClickRestartButton);
         }
     }
 }

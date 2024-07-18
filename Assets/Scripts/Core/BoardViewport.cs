@@ -8,6 +8,7 @@ namespace Core
         public event Zoom OnZoom;
         public event Move OnMove;
 
+        public Vector2Int Location { get; }
         public Vector2Int Resolution { get; }
         public ViewportBounds Bounds { get; }
         public int ZoomFactor { get; }
@@ -19,12 +20,11 @@ namespace Core
     {
         public event Zoom OnZoom;
         public event Move OnMove;
+        public Vector2Int Location { get; protected set; }
         public Vector2Int Resolution { get; private set; }
         public int ZoomFactor { get; protected set; } = 1;
-        public Vector2Int Viewport => new Vector2Int(Mathf.FloorToInt(Resolution.x / 2f / ZoomFactor), Mathf.FloorToInt(Resolution.y / 2f / ZoomFactor));
-        public ViewportBounds Bounds => new ViewportBounds(location, Viewport);
-
-        private Vector2Int location;
+        public ViewportBounds Bounds => new ViewportBounds(Location, Viewport);
+        private Vector2Int Viewport => new Vector2Int(Mathf.FloorToInt(Resolution.x / 2f / ZoomFactor), Mathf.FloorToInt(Resolution.y / 2f / ZoomFactor));
 
         public BoardViewport(Vector2Int resolution)
         {
@@ -33,15 +33,15 @@ namespace Core
 
         public void Zoom(bool zoomIn)
         {
-            ZoomFactor = Mathf.Clamp(Mathf.RoundToInt(ZoomFactor * (zoomIn ? 2f : 1 / 2f)), 1, 16);
+            ZoomFactor = Mathf.Clamp(Mathf.CeilToInt(ZoomFactor * (zoomIn ? 2f : 1 / 2f)), 1, 16);
             OnZoom?.Invoke(ZoomFactor);
         }
 
         public void Move(Vector2Int direction, float deltaTime, float speed)
         {
-            Vector2Int sourceLocation = location;
-            location = Cell.GetLocation(new Vector3(location.x, location.y) + new Vector3(direction.x, direction.y) * deltaTime * speed);
-            OnMove?.Invoke(sourceLocation, location);
+            Vector2Int sourceLocation = Location;
+            Location += Cell.GetLocation(new Vector3(direction.x, direction.y) * deltaTime * speed);
+            OnMove?.Invoke(sourceLocation, Location);
         }
     }
 

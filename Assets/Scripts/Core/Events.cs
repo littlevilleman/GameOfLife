@@ -10,6 +10,8 @@ namespace Core
 
         //Player
         public delegate void Pause(bool pause = true);
+
+        //Viewport
         public delegate void Zoom(int zoomFactor = 1);
         public delegate void Move(Vector2Int source, Vector2Int destiny);
 
@@ -17,5 +19,4 @@ namespace Core
         public delegate void EditBoard(ICollection<Vector2Int> cells);
         public delegate void EditCell(int x, int y, bool alive);
     }
-
 }

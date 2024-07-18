@@ -45,13 +45,12 @@ namespace Client
         private void OnMove(Vector2Int source, Vector2Int destiny)
         {
             target.Refresh(source);
-            transform.position = new Vector3(destiny.x, destiny.y);
+            transform.position = new Vector3(viewport.Location.x, viewport.Location.y);
         }
 
-        public Vector2Int GetPointerLocation(Vector3 mousePosition)
+        public Vector3 GetPointerPosition(Vector3 mousePosition)
         {
-            return Cell.GetLocation(cam.ScreenToWorldPoint(mousePosition));
+            return cam.ScreenToWorldPoint(mousePosition);
         }
     }
-
 }

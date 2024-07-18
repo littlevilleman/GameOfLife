@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Shader Graphs_GridShader02
+  m_Name: GridMaterial
   m_Shader: {fileID: -6465566751694194690, guid: 5ef9dffcd0d38fb4fb661d23c199079f, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -51,6 +51,6 @@ Material:
     m_Ints: []
     m_Floats: []
     m_Colors:
-    - _Color: {r: 1, g: 0, b: 0, a: 1}
+    - _Color: {r: 0.4792453, g: 0.4792453, b: 0.4792453, a: 1}
     - _size: {r: 1920, g: 1080, b: 0, a: 0}
   m_BuildTextureStacks: []

@@ -8,7 +8,7 @@ namespace Client
 {
     public class BoardScreen : MonoBehaviour
     {
-        [SerializeField] private BoardEditorWidget customerWidget;
+        [SerializeField] private BoardEditorWidget editorWidget;
         [SerializeField] private BoardPlayerWidget playerWidget;
 
         [SerializeField] private TMP_Text stepsText;
@@ -29,15 +29,14 @@ namespace Client
             board.OnStepOn += OnStepOn;
             player.OnPause += OnPause;
 
-            customerWidget.Display(parameters);
-            playerWidget.Display(parameters);
+            editorWidget.Display(parameters);
+            playerWidget.Display(parameters, editorWidget.Regenerate);
         }
         private void OnStepOn(int step, ICollection<Vector2Int> cells)
         {
             stepsText.text = $"Step: {step}";
             cellsText.text = $"Cells: {cells.Count}";
         }
-
 
         private void OnPause(bool isPaused)
         {
