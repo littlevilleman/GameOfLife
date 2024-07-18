@@ -5,7 +5,7 @@ namespace Core
 {
     public static class Cell
     {
-        public static bool IsAlive(IBoard board, Vector2Int cell)
+        public static bool IsAlive(ICellMap board, Vector2Int cell)
         {
             int aliveNeighbours = 0;
 
@@ -17,7 +17,7 @@ namespace Core
 
         public static HashSet<Vector2Int> GetNeighbours(Vector2Int cell)
         {
-            HashSet<Vector2Int> deadCells = new HashSet<Vector2Int>(8);
+            HashSet<Vector2Int> deadCells = new HashSet<Vector2Int>(9);
 
             for (int x = cell.x - 1; x <= cell.x + 1; x++)
                 for (int y = cell.y - 1; y <= cell.y + 1; y++)

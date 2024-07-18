@@ -5,16 +5,17 @@ using UnityEngine.UI;
 
 namespace Client
 {
-    public class BoardCustomerWidget : MonoBehaviour
+    public class BoardEditorWidget : MonoBehaviour
     {
+        [SerializeField] private CameraBehavior cam;
         [SerializeField] private Button clearButton;
         [SerializeField] private Button generateBoardButton;
         [SerializeField] private Button restartButton;
         [SerializeField] private TMP_Text seedInput;
 
         private IBoardEditor editor;
-        private ICustomizableBoard board;
-        private IBoardPlayer player;
+        private IEditableCellMap board;
+        private IBoardPlayerHandler player;
 
         private int Seed => int.Parse(seedInput.text);
 
@@ -28,15 +29,12 @@ namespace Client
         public void Display(object[] parameters)
         {
             editor = parameters[0] as IBoardEditor;
-            board = parameters[1] as ICustomizableBoard;
-            player = parameters[2] as IBoardPlayer;
+            board = parameters[1] as IEditableCellMap;
+            player = parameters[2] as IBoardPlayerHandler;
         }
 
         public void Update()
         {
-            if (!player.IsPaused)
-                return;
-
             if (Input.GetMouseButton(0))
                 PaintCell(true);
 
@@ -51,6 +49,7 @@ namespace Client
             editor.Clear(board);
             editor.Generate(board, Seed);
             player.Pause(true);
+            player.Reset();
         }
 
         private void OnClickClearButton()
@@ -64,11 +63,15 @@ namespace Client
             editor.Clear(board);
             editor.Generate(board, Seed);
             player.Pause(true);
+            player.Reset();
         }
 
         private void PaintCell(bool paint)
         {
-            Vector2Int location = Cell.GetLocation(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+            if (player.IsPaused)
+                return;
+
+            Vector2Int location = cam.GetPointerLocation(Input.mousePosition);
             editor.EditCell(board, location.x, location.y, paint);
         }
 
@@ -79,5 +82,4 @@ namespace Client
             restartButton.onClick.RemoveListener(OnClickRestartButton);
         }
     }
-
 }

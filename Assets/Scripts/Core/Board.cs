@@ -8,46 +8,39 @@ namespace Core
     public interface IBoardConfig
     {
         public Vector2Int Size { get; }
-        public float RefreshRate { get; }
+        public Color AliveColor { get;}
+        public Color DeadColor { get; }
     }
 
-    public interface IBoard
+    public interface ICellMap
     {
-        public event StepOn OnStepOn;
-        public void StepOn();
+        public ICollection<Vector2Int> Cells { get; }
         public bool GetCell(Vector2Int location);
     }
 
-    public interface ICustomizableBoard : IBoard
-    {
-        public int CellsCount { get; }
-        public void SetCell(Vector2Int location, bool alive);
-        public void Clear();
-    }
-
-    public class Board : ICustomizableBoard
+    public interface IBoard : ICellMap
     {
         public event StepOn OnStepOn;
-        public int CellsCount => cells.Count;
+        public void PlayStep(int step);
+    }
+
+    public class Board : IBoard, IEditableCellMap
+    {
+        public event StepOn OnStepOn;
+        public ICollection<Vector2Int> Cells => cells;
 
         private HashSet<Vector2Int> cells = new HashSet<Vector2Int>();
-        private int step = 0;
 
-        public void StepOn()
+        public void PlayStep(int step)
         {
-            HashSet<Vector2Int> cellsUpdt = new HashSet<Vector2Int>();
-
-            cellsUpdt.AddRange(cells);
+            HashSet<Vector2Int> cellsUpdt = new HashSet<Vector2Int>(cells);
 
             foreach (Vector2Int cell in cells)
-                foreach (Vector2Int neighbour in Cell.GetNeighbours(cell))
-                    cellsUpdt.Add(neighbour);
+                cellsUpdt.AddRange(Cell.GetNeighbours(cell));
 
             cellsUpdt.RemoveWhere(cell => !Cell.IsAlive(this, cell));
-
-            step++;
-            cells = cellsUpdt;
-            OnStepOn?.Invoke(cells, step);
+            cells = new HashSet<Vector2Int>(cellsUpdt);
+            OnStepOn?.Invoke(step, cells);
         }
 
         public bool GetCell(Vector2Int location)
@@ -58,15 +51,14 @@ namespace Core
         public void SetCell(Vector2Int location, bool alive)
         {
             if (alive)
-                cells.Add(new Vector2Int(location.x, location.y));
+                cells.Add(location);
             else
-                cells.Remove(new Vector2Int(location.x, location.y));
+                cells.Remove(location);
         }
 
         public void Clear()
         {
             cells.Clear();
-            step = 0;
         }
     }
 }

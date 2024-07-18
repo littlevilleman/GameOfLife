@@ -3,24 +3,30 @@ using static Core.Events;
 
 namespace Core
 {
+    public interface IEditableCellMap : ICellMap
+    {
+        public void SetCell(Vector2Int location, bool alive);
+        public void Clear();
+    }
+
     public interface IBoardEditor
     {
-        public event RefreshBoard OnEdit;
-        public event RefreshCell OnEditCell;
+        public event EditBoard OnEdit;
+        public event EditCell OnEditCell;
 
-        public void Generate(ICustomizableBoard board, int seed);
-        public void EditCell(ICustomizableBoard board, int x, int y, bool alive);
-        public void Clear(ICustomizableBoard board);
+        public void Generate(IEditableCellMap board, int seed);
+        public void EditCell(IEditableCellMap board, int x, int y, bool alive);
+        public void Clear(IEditableCellMap board);
     }
 
     public class BoardEditor : IBoardEditor
     {
-        public event RefreshBoard OnEdit;
-        public event RefreshCell OnEditCell;
+        public event EditBoard OnEdit;
+        public event EditCell OnEditCell;
 
         private System.Random random = new System.Random();
 
-        public void Generate(ICustomizableBoard board, int seed)
+        public void Generate(IEditableCellMap board, int seed)
         {
             random = new System.Random(seed);
             int aliveCount = random.Next(0, 10000);
@@ -28,19 +34,19 @@ namespace Core
             for (int i = 0; i < aliveCount; i++)
                 board.SetCell(new Vector2Int(random.Next(-125, 125), random.Next(-125, 250)) / 2, true);
 
-            OnEdit?.Invoke();
+            OnEdit?.Invoke(board.Cells);
         }
 
-        public void EditCell(ICustomizableBoard board, int x, int y, bool alive)
+        public void EditCell(IEditableCellMap board, int x, int y, bool alive)
         {
             board.SetCell(new Vector2Int(x, y), alive);
             OnEditCell?.Invoke(x, y, alive);
         }
 
-        public void Clear(ICustomizableBoard board)
+        public void Clear(IEditableCellMap board)
         {
             board.Clear();
-            OnEdit?.Invoke();
+            OnEdit?.Invoke(board.Cells);
         }
     }
 }

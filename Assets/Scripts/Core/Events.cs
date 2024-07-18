@@ -5,12 +5,17 @@ namespace Core
 {
     public static class Events
     {
-        public delegate void StepOn(HashSet<Vector2Int> cells, int step);
-        public delegate void RefreshBoard();
-        public delegate void RefreshCell(int x, int y, bool alive);
+        //Board
+        public delegate void StepOn(int step, ICollection<Vector2Int> cells);
 
+        //Player
         public delegate void Pause(bool pause = true);
-        public delegate void Zoom(int zoomFactro = 1);
+        public delegate void Zoom(int zoomFactor = 1);
+        public delegate void Move(Vector2Int source, Vector2Int destiny);
+
+        //Generator
+        public delegate void EditBoard(ICollection<Vector2Int> cells);
+        public delegate void EditCell(int x, int y, bool alive);
     }
 
 }

@@ -1,38 +1,46 @@
-using UnityEngine;
 using static Core.Events;
 
 namespace Core
 {
-    public interface IBoardPlayer
+    public interface IBoardPlayerHandler
     {
-        public event Pause OnPause;
-        public event Zoom OnZoom;
-        public Vector2Int Resolution { get; }
-        public float Speed { get; }
-        public int ZoomFactor { get; }
         public bool IsPaused { get; }
-        public Vector2Int Viewport { get; }
         public void Pause();
         public void Pause(bool pause);
-        public void Zoom(bool zoomIn);
+        public void Reset();
         public void SetSpeed(float speed);
     }
 
-    public class BoardPlayer : IBoardPlayer
+    public interface IBoardPlayer
     {
         public event Pause OnPause;
-        public event Zoom OnZoom;
 
-        public Vector2Int Resolution { get; private set; }
-        public int ZoomFactor { get; protected set; } = 1;
+        public float Speed { get; }
+        public bool IsPaused { get; }
+
+        public void Update(IBoard board, float deltaTime);
+    }
+
+    public class BoardPlayer : IBoardPlayer, IBoardPlayerHandler
+    {
+        public event Pause OnPause;
         public bool IsPaused { get; protected set; } = true;
-        public float Speed { get; protected set; } = .5f;
-        public Vector2Int Viewport => new Vector2Int(Mathf.RoundToInt(Resolution.x / 2f / ZoomFactor), Mathf.RoundToInt(Resolution.y / 2f / ZoomFactor));
+        public float Speed { get; protected set; } = 100f;
+        public void SetSpeed(float speed) { Speed = speed; }
 
+        private float refreshTime = 0f;
+        private int step = 0;
 
-        public BoardPlayer(Vector2Int resolution) 
+        public void Update(IBoard board, float deltaTime)
         {
-            Resolution = resolution;
+            refreshTime -= IsPaused ? 0f : deltaTime;
+
+            if (IsPaused || refreshTime > Speed)
+                return ;
+
+            refreshTime = 1f;
+            step++;
+            board.PlayStep(step);
         }
 
         public void Pause()
@@ -47,32 +55,9 @@ namespace Core
                 Pause();
         }
 
-        public void Zoom(bool zoomIn)
+        public void Reset()
         {
-            ZoomFactor = Mathf.Clamp(Mathf.RoundToInt(ZoomFactor * (zoomIn ? 2f : 1 / 2f)), 1, 16);
-            OnZoom?.Invoke(ZoomFactor);
-        }
-
-        public void SetSpeed(float speed)
-        {
-            Speed = speed;
-        }
-    }
-
-    public struct ViewportBounds
-    {
-        public Vector2Int location;
-        public Vector2Int size;
-
-        public ViewportBounds(Vector2Int location, Vector2Int size)
-        {
-            this.location = location;
-            this.size = size;
-        }
-
-        public bool Contains(Vector2Int cell)
-        {
-            return cell.x - location.x >= -size.x && cell.x - location.x < size.x && cell.y - location.y >= -size.y && cell.y - location.y < size.y;
+            step = 0;
         }
     }
 }

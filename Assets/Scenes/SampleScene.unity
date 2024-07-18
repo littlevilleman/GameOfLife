@@ -897,10 +897,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5da162bd28aad834fa12422d64a6f5ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  customerWidget: {fileID: 626926688}
+  playerWidget: {fileID: 626926687}
   stepsText: {fileID: 1374277630}
   cellsText: {fileID: 1968571025}
-  customer: {fileID: 626926688}
-  player: {fileID: 626926687}
+  playButtonImage: {fileID: 1719031965}
+  playIcon: {fileID: 21300000, guid: d4ffa072fbfd8534abb463cf5e4d2475, type: 3}
+  pauseIcon: {fileID: 21300000, guid: f0762f28ce7858046ae76f420e039516, type: 3}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -914,7 +917,6 @@ GameObject:
   - component: {fileID: 519420037}
   - component: {fileID: 519420034}
   - component: {fileID: 519420036}
-  - component: {fileID: 519420038}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -959,7 +961,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef5e77231df54614ab74c8b83569a45d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ppCam: {fileID: 519420038}
+  cam: {fileID: 519420037}
 --- !u!114 &519420036
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -977,7 +979,7 @@ MonoBehaviour:
   m_RequiresOpaqueTextureOption: 2
   m_CameraType: 0
   m_Cameras: []
-  m_RendererIndex: 0
+  m_RendererIndex: -1
   m_VolumeLayerMask:
     serializedVersion: 2
     m_Bits: 1
@@ -1014,7 +1016,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.8037735, g: 0.28359556, b: 0.28359556, a: 0}
+  m_BackGroundColor: {r: 0.13333334, g: 0.13333334, b: 0.13333334, a: 1}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -1043,7 +1045,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 55
+    m_Bits: 4294967295
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -1055,30 +1057,6 @@ Camera:
   m_OcclusionCulling: 0
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!114 &519420038
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 519420028}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c88f5cead0c0b2a4eb05b5900433f8d1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_ComponentVersion: 1
-  m_AssetsPPU: 1
-  m_RefResolutionX: 1920
-  m_RefResolutionY: 1080
-  m_CropFrame: 0
-  m_GridSnapping: 2
-  m_FilterMode: 0
-  m_UpscaleRT: 0
-  m_PixelSnapping: 0
-  m_CropFrameX: 0
-  m_CropFrameY: 0
-  m_StretchFill: 0
 --- !u!1 &524444818
 GameObject:
   m_ObjectHideFlags: 0
@@ -1463,9 +1441,6 @@ MonoBehaviour:
   zoomInButton: {fileID: 2012566707}
   zoomOutButton: {fileID: 858048151}
   speedSlider: {fileID: 254772024}
-  playButtonImage: {fileID: 1719031965}
-  playIcon: {fileID: 21300000, guid: d4ffa072fbfd8534abb463cf5e4d2475, type: 3}
-  pauseIcon: {fileID: 21300000, guid: f0762f28ce7858046ae76f420e039516, type: 3}
 --- !u!114 &626926688
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1478,6 +1453,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 845521100e4c5b04d8e3c5038760c8cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cam: {fileID: 519420034}
   clearButton: {fileID: 284099572}
   generateBoardButton: {fileID: 2056434817}
   restartButton: {fileID: 1193383335}
@@ -2047,6 +2023,54 @@ RectTransform:
   m_AnchoredPosition: {x: -5, y: 0}
   m_SizeDelta: {x: -20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &918182308
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 918182310}
+  - component: {fileID: 918182309}
+  m_Layer: 0
+  m_Name: ClientManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &918182309
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 918182308}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8cd21876a5202484a8ced7f3acac5782, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cam: {fileID: 519420034}
+  boardBhv: {fileID: 1609795895}
+  boardScreen: {fileID: 393640163}
+  config: {fileID: 11400000, guid: 098ac3958dc2da5439c002deb64627fd, type: 2}
+--- !u!4 &918182310
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 918182308}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &956937909
 GameObject:
   m_ObjectHideFlags: 0
@@ -2260,7 +2284,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1057334839
 Transform:
   m_ObjectHideFlags: 0
@@ -2270,8 +2294,8 @@ Transform:
   m_GameObject: {fileID: 1057334838}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.18999958}
-  m_LocalScale: {x: 500, y: 500, z: 500}
+  m_LocalPosition: {x: 0, y: 0, z: -1}
+  m_LocalScale: {x: 1920, y: 1080, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1609795894}
@@ -2762,12 +2786,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c0bdb70fefb229448a7ad065b42b7ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cam: {fileID: 519420034}
-  screen: {fileID: 393640163}
-  config: {fileID: 11400000, guid: 098ac3958dc2da5439c002deb64627fd, type: 2}
+  grid: {fileID: 1057334840}
   rend: {fileID: 797286307}
-  aliveColor: {r: 0.86415094, g: 0.86415094, b: 0.86415094, a: 1}
-  deadColor: {r: 0.09433961, g: 0.09433961, b: 0.09433961, a: 1}
 --- !u!1 &1621299592
 GameObject:
   m_ObjectHideFlags: 0
@@ -3825,3 +3845,4 @@ SceneRoots:
   - {fileID: 43901594}
   - {fileID: 619394802}
   - {fileID: 519420032}
+  - {fileID: 918182310}

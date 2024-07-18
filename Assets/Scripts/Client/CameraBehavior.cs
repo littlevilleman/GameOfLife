@@ -1,47 +1,56 @@
 using Core;
 using UnityEngine;
-using UnityEngine.Experimental.Rendering.Universal;
 
 namespace Client
 {
     public class CameraBehavior : MonoBehaviour
     {
-        [SerializeField] private PixelPerfectCamera ppCam;
-        private IBoardPlayer Player;
+        [SerializeField] private Camera cam;
 
-        public void Setup(IBoardPlayer player)
+        private IBoardPlayer player;
+        private IBoardViewport viewport;
+        private IBoardLocator target;
+
+        public void Display(IBoardPlayer playerSetup, IBoardViewport viewportSetup, IBoardLocator targetSetup)
         {
-            Player = player;
-            Player.OnZoom += Zoom;
+            player = playerSetup;
+            viewport = viewportSetup;
+            target = targetSetup;
+            viewport.OnZoom += OnZoom;
+            viewport.OnMove += OnMove;
 
-            Zoom(player.ZoomFactor);
+            OnZoom(viewportSetup.ZoomFactor);
         }
 
-        void LateUpdate()
+        private void Update()
         {
             if (Input.GetKey(KeyCode.D))
-                Move(Vector3.right);
+                viewport.Move(Vector2Int.right, Time.deltaTime, player.Speed);
             
             if (Input.GetKey(KeyCode.A))
-                Move(Vector3.left);
+                viewport.Move(Vector2Int.left, Time.deltaTime, player.Speed);
             
             if (Input.GetKey(KeyCode.W))
-                Move(Vector3.up);
+                viewport.Move(Vector2Int.up, Time.deltaTime, player.Speed);
 
             if (Input.GetKey(KeyCode.S))
-                Move(Vector3.down);
+                viewport.Move(Vector2Int.down, Time.deltaTime, player.Speed);
         }
 
-        private void Move(Vector3 direction)
+        private void OnZoom(int zoomFactor)
         {
-            //Vector2Int location = Cell.GetLocation(transform.position + Time.deltaTime * direction * Player.Resolution.y);
-            //transform.position = new Vector3(location.x, location.y);
+            target.ResetTexture(viewport);
         }
 
-        public void Zoom(int zoomFactor)
+        private void OnMove(Vector2Int source, Vector2Int destiny)
         {
-            //ppCam.refResolutionX = Player.Resolution.x / zoomFactor;
-            //ppCam.refResolutionY = Player.Resolution.y / zoomFactor;
+            target.Refresh(source);
+            transform.position = new Vector3(destiny.x, destiny.y);
+        }
+
+        public Vector2Int GetPointerLocation(Vector3 mousePosition)
+        {
+            return Cell.GetLocation(cam.ScreenToWorldPoint(mousePosition));
         }
     }
 

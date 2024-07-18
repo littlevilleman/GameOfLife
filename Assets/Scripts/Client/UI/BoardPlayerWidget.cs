@@ -1,5 +1,4 @@
 using Core;
-using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,11 +11,8 @@ namespace Client
         [SerializeField] private Button zoomOutButton;
         [SerializeField] private Slider speedSlider;
 
-        [SerializeField] private Image playButtonImage;
-        [SerializeField] private Sprite playIcon;
-        [SerializeField] private Sprite pauseIcon;
-
-        private IBoardPlayer player;
+        private IBoardPlayerHandler player;
+        private IBoardViewport viewport;
 
         private void OnEnable()
         {
@@ -28,25 +24,20 @@ namespace Client
 
         public void Display(object[] parameters)
         {
-            player = parameters[2] as IBoardPlayer;
-            player.OnPause += OnPause;
+            player = parameters[2] as IBoardPlayerHandler;
+            viewport = parameters[3] as IBoardViewport;
 
-            speedSlider.value = player.Speed;
+            speedSlider.value = (parameters[2] as IBoardPlayer).Speed;
         }
 
         private void OnClickZoomButton(bool zoomIn)
         {
-            player.Zoom(zoomIn);
+            viewport.Zoom(zoomIn);
         }
 
         private void OnClickPlayButton()
         {
             player.Pause();
-        }
-
-        private void OnPause(bool isPaused)
-        {
-            playButtonImage.sprite = isPaused ? playIcon : pauseIcon;
         }
 
         private void OnSpeedValueChanged(float speed)
@@ -56,8 +47,6 @@ namespace Client
 
         private void OnDisable()
         {
-            player.OnPause -= OnPause;
-
             playButton.onClick.RemoveListener(OnClickPlayButton);
             zoomInButton.onClick.RemoveListener(() => OnClickZoomButton(true));
             zoomOutButton.onClick.RemoveListener(() => OnClickZoomButton(false));
