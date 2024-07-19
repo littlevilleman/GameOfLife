@@ -22,7 +22,7 @@ namespace Core
         public event Move OnMove;
         public Vector2Int Location { get; protected set; }
         public Vector2Int Resolution { get; private set; }
-        public int ZoomFactor { get; protected set; } = 1;
+        public int ZoomFactor { get; protected set; } = 2;
         public ViewportBounds Bounds => new ViewportBounds(Location, Viewport);
         private Vector2Int Viewport => new Vector2Int(Mathf.FloorToInt(Resolution.x / 2f / ZoomFactor), Mathf.FloorToInt(Resolution.y / 2f / ZoomFactor));
         private float speed = 150f;
