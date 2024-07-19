@@ -35,7 +35,7 @@ namespace Core
 
         public void Zoom(bool zoomIn)
         {
-            ZoomFactor = Mathf.Clamp(Mathf.CeilToInt(ZoomFactor * (zoomIn ? 2f : 1 / 2f)), 1, 16);
+            ZoomFactor = Mathf.Clamp(Mathf.CeilToInt(ZoomFactor * (zoomIn ? 2f : 1 / 2f)), 2, 32);
             OnZoom?.Invoke(ZoomFactor);
         }
 
