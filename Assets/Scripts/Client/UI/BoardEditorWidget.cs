@@ -67,7 +67,10 @@ namespace Client
                 return;
 
             Vector2Int location = Cell.GetLocation(cam.GetPointerPosition(Input.mousePosition));
-            editor.EditCell(board, location.x, location.y, paint);
+            Physics.Raycast(cam.GetPointerPosition(Input.mousePosition) , Vector3.forward, out RaycastHit hit, 200);
+
+            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Board"))
+                editor.EditCell(board, location.x, location.y, paint);
         }
 
         private void OnDisable()

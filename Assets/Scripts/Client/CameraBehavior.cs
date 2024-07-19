@@ -7,13 +7,11 @@ namespace Client
     {
         [SerializeField] private Camera cam;
 
-        private IBoardPlayer player;
         private IBoardViewport viewport;
         private IBoardLocator target;
 
-        public void Display(IBoardPlayer playerSetup, IBoardViewport viewportSetup, IBoardLocator targetSetup)
+        public void Display(IBoardViewport viewportSetup, IBoardLocator targetSetup)
         {
-            player = playerSetup;
             viewport = viewportSetup;
             target = targetSetup;
             viewport.OnZoom += OnZoom;
@@ -25,16 +23,16 @@ namespace Client
         private void Update()
         {
             if (Input.GetKey(KeyCode.D))
-                viewport.Move(Vector2Int.right, Time.deltaTime, player.Speed);
+                viewport.Move(Vector2Int.right, Time.deltaTime);
             
             if (Input.GetKey(KeyCode.A))
-                viewport.Move(Vector2Int.left, Time.deltaTime, player.Speed);
+                viewport.Move(Vector2Int.left, Time.deltaTime);
             
             if (Input.GetKey(KeyCode.W))
-                viewport.Move(Vector2Int.up, Time.deltaTime, player.Speed);
+                viewport.Move(Vector2Int.up, Time.deltaTime);
 
             if (Input.GetKey(KeyCode.S))
-                viewport.Move(Vector2Int.down, Time.deltaTime, player.Speed);
+                viewport.Move(Vector2Int.down, Time.deltaTime);
         }
 
         private void OnZoom(int zoomFactor)
@@ -50,7 +48,7 @@ namespace Client
 
         public Vector3 GetPointerPosition(Vector3 mousePosition)
         {
-            return cam.ScreenToWorldPoint(mousePosition);
+            return cam.ScreenToWorldPoint(mousePosition) / viewport.ZoomFactor;
         }
     }
 }

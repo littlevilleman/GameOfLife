@@ -13,7 +13,7 @@ namespace Core
         public ViewportBounds Bounds { get; }
         public int ZoomFactor { get; }
         public void Zoom(bool zoomIn);
-        public void Move(Vector2Int direction, float deltaTime, float speed);
+        public void Move(Vector2Int direction, float deltaTime);
     }
 
     public class BoardViewport : IBoardViewport
@@ -25,10 +25,12 @@ namespace Core
         public int ZoomFactor { get; protected set; } = 1;
         public ViewportBounds Bounds => new ViewportBounds(Location, Viewport);
         private Vector2Int Viewport => new Vector2Int(Mathf.FloorToInt(Resolution.x / 2f / ZoomFactor), Mathf.FloorToInt(Resolution.y / 2f / ZoomFactor));
+        private float speed = 150f;
 
-        public BoardViewport(Vector2Int resolution)
+        public BoardViewport(IBoardConfig config)
         {
-            Resolution = resolution;
+            Resolution = config.Resolution;
+            speed = config.ViewportSpeed;
         }
 
         public void Zoom(bool zoomIn)
@@ -37,10 +39,10 @@ namespace Core
             OnZoom?.Invoke(ZoomFactor);
         }
 
-        public void Move(Vector2Int direction, float deltaTime, float speed)
+        public void Move(Vector2Int direction, float deltaTime)
         {
             Vector2Int sourceLocation = Location;
-            Location += Cell.GetLocation(new Vector3(direction.x, direction.y) * deltaTime * speed);
+            Location = new Vector2Int(Mathf.RoundToInt(Location.x + direction.x * deltaTime * speed), Mathf.RoundToInt(Location.y + direction.y * deltaTime * speed));
             OnMove?.Invoke(sourceLocation, Location);
         }
     }

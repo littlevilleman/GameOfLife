@@ -32,7 +32,6 @@ namespace Client
             player = parameters[2] as IBoardPlayerHandler;
             viewport = parameters[3] as IBoardViewport;
             speedSlider.value = (parameters[2] as IBoardPlayer).Speed;
-
             onRestart = restartCallback;
         }
 

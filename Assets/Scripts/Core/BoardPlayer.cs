@@ -14,10 +14,8 @@ namespace Core
     public interface IBoardPlayer
     {
         public event Pause OnPause;
-
         public float Speed { get; }
         public bool IsPaused { get; }
-
         public void Update(IBoard board, float deltaTime);
     }
 
@@ -25,7 +23,7 @@ namespace Core
     {
         public event Pause OnPause;
         public bool IsPaused { get; protected set; } = true;
-        public float Speed { get; protected set; } = 100f;
+        public float Speed { get; protected set; } = .5f;
         public void SetSpeed(float speed) { Speed = speed; }
 
         private float refreshTime = 0f;

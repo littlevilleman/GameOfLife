@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using static Core.Events;
 
@@ -10,6 +9,8 @@ namespace Core
         public Vector2Int Size { get; }
         public Color AliveColor { get;}
         public Color DeadColor { get; }
+        public float ViewportSpeed { get; }
+        public Vector2Int Resolution {get; }
     }
 
     public interface ICellMap
@@ -35,11 +36,12 @@ namespace Core
             HashSet<Vector2Int> cellsUpdt = new HashSet<Vector2Int>(cells);
 
             foreach (Vector2Int cell in cells)
-                cellsUpdt.AddRange(Cell.GetNeighbours(cell));
+                foreach (Vector2Int neighbour in Cell.GetNeighbours(cell))
+                    cellsUpdt.Add(neighbour);
 
             cellsUpdt.RemoveWhere(cell => !Cell.IsAlive(this, cell));
             cells = new HashSet<Vector2Int>(cellsUpdt);
-            OnStepOn?.Invoke(step, cells);
+            OnStepOn(step, cells);
         }
 
         public bool GetCell(Vector2Int location)

@@ -12,8 +12,8 @@ namespace Client
 
     public class BoardBehavior : MonoBehaviour, IBoardLocator
     {
-        [SerializeField] private Renderer grid;
         [SerializeField] private Renderer rend;
+        [SerializeField] private Renderer grid;
 
         private IBoard board;
         private IBoardPlayer player;
@@ -46,9 +46,9 @@ namespace Client
         {
             ViewportBounds bounds = viewport.Bounds;
 
-            currentCells.ExceptWith(cells);
             foreach (Vector2Int cell in currentCells)
-                texture.SetPixel(cell.x - bounds.location.x, cell.y - bounds.location.y, config.DeadColor);
+                if(!cells.Contains(cell))
+                    texture.SetPixel(cell.x - bounds.location.x, cell.y - bounds.location.y, config.DeadColor);
 
             foreach (Vector2Int cell in cells)
                 if(bounds.Contains(cell))
@@ -60,6 +60,7 @@ namespace Client
 
         private void RefreshCell(int x, int y, bool alive)
         {
+            currentCells.Add(new Vector2Int(x, y));
             texture.SetPixel(x, y, alive ? config.AliveColor : config.DeadColor);
             texture.Apply();
         }
@@ -74,9 +75,10 @@ namespace Client
 
         public void ResetTexture(IBoardViewport viewport)
         {
-            texture = new Texture2D(viewport.Resolution.x / viewport.ZoomFactor, viewport.Resolution.y / viewport.ZoomFactor, TextureFormat.RGFloat, false);
+            Vector2Int res = new Vector2Int(viewport.Resolution.x / viewport.ZoomFactor, viewport.Resolution.y / viewport.ZoomFactor);
+            texture = new Texture2D(res.x, res.y, TextureFormat.RGFloat, false);
+            grid.material.SetVector("_size", new Vector4(res.x, res.y));
             rend.material.mainTexture = texture;
-            grid.material.SetVector("_size", new Vector4(viewport.Resolution.x, viewport.Resolution.y) / viewport.ZoomFactor);
             currentCells.Clear();
         }
     }

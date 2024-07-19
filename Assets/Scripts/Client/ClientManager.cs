@@ -13,7 +13,7 @@ namespace Client
 
         public void Awake()
         {
-            Application.targetFrameRate = 60;
+            //Application.targetFrameRate = 60;
         }
 
         public void Start()
@@ -21,12 +21,11 @@ namespace Client
             IBoard board = new Board();
             IBoardEditor editor = new BoardEditor();
             IBoardPlayer player = new BoardPlayer();
-            IBoardViewport viewport = new BoardViewport(new Vector2Int(Screen.currentResolution.width, Screen.currentResolution.height));
+            IBoardViewport viewport = new BoardViewport(config);
 
             boardBhv.Display(board, player, viewport, editor, config);
             boardScreen.Display(editor, board, player, viewport);
-            cam.Display(player, viewport, boardBhv);
+            cam.Display(viewport, boardBhv);
         }
-
     }
 }
