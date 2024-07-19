@@ -78,6 +78,7 @@ namespace Client
             Vector2Int res = new Vector2Int(viewport.Resolution.x / viewport.ZoomFactor, viewport.Resolution.y / viewport.ZoomFactor);
             texture = new Texture2D(res.x, res.y, TextureFormat.RGFloat, false);
             grid.material.SetVector("_size", new Vector4(res.x, res.y));
+            grid.gameObject.SetActive(viewport.ZoomFactor > 4);
             rend.material.mainTexture = texture;
             currentCells.Clear();
         }
