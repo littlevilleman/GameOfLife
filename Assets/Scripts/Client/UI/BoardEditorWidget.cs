@@ -1,6 +1,7 @@
 using Core;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Client
@@ -14,6 +15,7 @@ namespace Client
 
         private IBoardEditor editor;
         private IEditableCellMap board;
+        private IBoardViewport viewport;
         private IBoardPlayerHandler player;
 
         private int Seed => int.Parse(seedInput.text);
@@ -29,6 +31,7 @@ namespace Client
             editor = parameters[0] as IBoardEditor;
             board = parameters[1] as IEditableCellMap;
             player = parameters[2] as IBoardPlayerHandler;
+            viewport = parameters[3] as IBoardViewport;
         }
 
         public void Update()
@@ -63,11 +66,11 @@ namespace Client
 
         private void EditCell(bool paint)
         {
-            if (!player.IsPaused)
+            if (!player.IsPaused || EventSystem.current.IsPointerOverGameObject())
                 return;
 
             Vector2Int location = Cell.GetLocation(cam.GetPointerPosition(Input.mousePosition));
-            Physics.Raycast(cam.GetPointerPosition(Input.mousePosition) , Vector3.forward, out RaycastHit hit, 200);
+            Physics.Raycast(cam.GetPointerPosition(Input.mousePosition) , Vector3.forward, out RaycastHit hit, 50);
 
             if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Board"))
                 editor.EditCell(board, location.x, location.y, paint);

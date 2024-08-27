@@ -22,7 +22,7 @@ namespace Core
         public event Move OnMove;
         public Vector2Int Location { get; protected set; }
         public Vector2Int Resolution { get; private set; }
-        public int ZoomFactor { get; protected set; } = 2;
+        public int ZoomFactor { get; protected set; } = 16;
         public ViewportBounds Bounds => new ViewportBounds(Location, Viewport);
         private Vector2Int Viewport => new Vector2Int(Mathf.FloorToInt(Resolution.x / 2f / ZoomFactor), Mathf.FloorToInt(Resolution.y / 2f / ZoomFactor));
         private float speed = 150f;
@@ -35,15 +35,15 @@ namespace Core
 
         public void Zoom(bool zoomIn)
         {
-            ZoomFactor = Mathf.Clamp(Mathf.CeilToInt(ZoomFactor * (zoomIn ? 2f : 1 / 2f)), 2, 32);
-            OnZoom?.Invoke(ZoomFactor);
+            //ZoomFactor = Mathf.Clamp(Mathf.CeilToInt(ZoomFactor * (zoomIn ? 2f : 1 / 2f)), 2, 32);
+            //OnZoom?.Invoke(ZoomFactor);
         }
 
         public void Move(Vector2Int direction, float deltaTime)
         {
-            Vector2Int sourceLocation = Location;
-            Location = new Vector2Int(Mathf.RoundToInt(Location.x + direction.x * deltaTime * speed), Mathf.RoundToInt(Location.y + direction.y * deltaTime * speed));
-            OnMove?.Invoke(sourceLocation, Location);
+            //Vector2Int sourceLocation = Location;
+            //Location = new Vector2Int(Mathf.RoundToInt(Location.x + direction.x * deltaTime * speed), Mathf.RoundToInt(Location.y + direction.y * deltaTime * speed));
+            //OnMove?.Invoke(sourceLocation, Location);
         }
     }
 

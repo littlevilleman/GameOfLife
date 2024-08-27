@@ -20,11 +20,13 @@ namespace Client
 
         private IBoardPlayer player;
         private IBoard board;
+        private IBoardViewport viewport;
 
         public void Display(params object[] parameters)
         {
             player= parameters[2] as IBoardPlayer;
             board = parameters[1] as IBoard;
+            viewport = parameters[3] as IBoardViewport;
 
             board.OnStepOn += OnStepOn;
             player.OnPause += OnPause;
